@@ -38,6 +38,7 @@ class API:
     def requestDataSanitization(self, file_name):
         api_url = "https://api.metadefender.com/v2/file"
         headers = self.headers
+		# user_agent is a required header for the data sanitization request
         headers["user_agent"] = "mcl-metadefender-rest-sanitize-disabled-unarchive"
         files = open(file_name, "rb")
         response = requests.post(api_url, headers=headers, data=files)
@@ -52,6 +53,7 @@ class API:
     def retrieveSanitizedFile(self, file_id, file_name):
         api_url = "https://api.metadefender.com/v2/file/" + file_id
         headers = self.headers
+        # the user_agent header is also required for obtaining the newly sanitized file via a download link
         headers["user_agent"] = "mcl-metadefender-rest-sanitize-disabled-unarchive"
         response = requests.get(api_url, headers=headers)
         if response.status_code != 200:
