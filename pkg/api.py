@@ -15,7 +15,7 @@ class API:
         api_url = "https://api.metadefender.com/v2/hash/" + file_hash
         response = requests.get(api_url, headers=self.headers)
         if response.status_code != 200:
-            print("hSR The server returned a ", response.status_code, file=sys.stderr)
+            print("The server returned a ", response.status_code, file=sys.stderr)
             sys.exit(1)
         data = response.json()
         report = [False, data]
@@ -29,7 +29,7 @@ class API:
         files = open(file_name, "rb")
         response = requests.post(api_url, headers=self.headers, data=files)
         if response.status_code != 200:
-            print("uF The server returned a ", response.status_code, file=sys.stderr)
+            print("The server returned a ", response.status_code, file=sys.stderr)
             sys.exit(1)
         data = response.json()
         return data["data_id"]
@@ -43,7 +43,7 @@ class API:
         files = open(file_name, "rb")
         response = requests.post(api_url, headers=headers, data=files)
         if response.status_code != 200:
-            print("rDS The server returned a ", response.status_code, file=sys.stderr)
+            print("The server returned a ", response.status_code, file=sys.stderr)
             sys.exit(1)
         data = response.json()
         file_id = data["data_id"]
@@ -57,7 +57,7 @@ class API:
         headers["user_agent"] = "mcl-metadefender-rest-sanitize-disabled-unarchive"
         response = requests.get(api_url, headers=headers)
         if response.status_code != 200:
-            print("rSF The server returned a ", response.status_code, file=sys.stderr)
+            print("The server returned a ", response.status_code, file=sys.stderr)
             sys.exit(1)
         data = response.json()
         if "sanitized" not in data.keys() or data["sanitized"]["result"] == "Sanitization failed":
@@ -72,7 +72,7 @@ class API:
         api_url = "https://api.metadefender.com/v2/file/" + file_data_id
         response = requests.get(api_url, headers=self.headers)
         if response.status_code != 200:
-            print("rSR The server returned a ", response.status_code, file=sys.stderr)
+            print("The server returned a ", response.status_code, file=sys.stderr)
             sys.exit(1)
         data = response.json()
 
