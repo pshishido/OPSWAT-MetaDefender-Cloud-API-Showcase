@@ -10,5 +10,6 @@ This program was designed to display some of the functionality offered by OPSWAT
 ### After running this program:
 * A scan report will be generated after each file scan. 
 * Additionally, for document files being scanned and uploaded for the first time, a download link to the sanitized binary data will be logged to the console.
+    * NOTE: The download will occasionally output the sanitized data into a file named "Unknown Filename". In this case, rename the file with the appropriate extension to access the file successfully.
 
 

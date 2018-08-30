@@ -38,7 +38,7 @@ class API:
     def requestDataSanitization(self, file_name):
         api_url = "https://api.metadefender.com/v2/file"
         headers = self.headers
-		# user_agent is a required header for the data sanitization request
+        # user_agent is a required header for the data sanitization request
         headers["user_agent"] = "mcl-metadefender-rest-sanitize-disabled-unarchive"
         files = open(file_name, "rb")
         response = requests.post(api_url, headers=headers, data=files)
@@ -60,11 +60,18 @@ class API:
             print("The server returned a ", response.status_code, file=sys.stderr)
             sys.exit(1)
         data = response.json()
-        if "sanitized" not in data.keys() or data["sanitized"]["result"] == "Sanitization failed":
-            print(file_name + " did not undergo data sanitization.")
-        else:
+        # ensure that the sanitization request has been processed by the server
+        while data["sanitized"]["result"] == "Processing":
+            response = requests.get(api_url, headers=headers)
+            data = response.json()
+            time.sleep(1)
+        if data["sanitized"]["result"] == "Allowed":
             print(file_name + " has been sanitized. \nThe sanitized file can be downloaded using the following link: "
                   + data["sanitized"]["file_path"])
+        elif "sanitized" not in data.keys() or data["sanitized"]["result"] == "Sanitization failed":
+            print(file_name + " did not undergo data sanitization.")
+        else:
+            print("There was an issue in the processing of the sanitization request for " + file_name)
 
 
     # Fetch Scan Result (by Data ID) via MetaDefender Cloud
@@ -76,7 +83,7 @@ class API:
             sys.exit(1)
         data = response.json()
 
-        # Ensure that we have the full scan report, especially useful for scanning large files
+        # ensure that we have the full scan report, especially useful for scanning large files
         while data['scan_results']['progress_percentage'] < 100:
             response = requests.get(api_url, headers=self.headers)
             data = response.json()
